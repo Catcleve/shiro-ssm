@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace需要与接口权限定类名一致-->
+<mapper namespace="com.shiro.mapper.UserMapper">
+    
+    <select id="findUserByName" resultType="user">
+        select * from t_user where userName = #{userName}
+    </select>
+
+    <select id="getPermissions" resultType="string">
+        SELECT p.code FROM t_permission p WHERE p.code is not null and p.pid IN
+        (SELECT rp.perId FROM t_role_permission rp WHERE rp.roleId in
+        (SELECT ur.roleId FROM t_user_role ur LEFT JOIN t_user u
+         on ur.uId = u.uId WHERE u.userName = #{userName}))
+    </select>
+
+</mapper>
+

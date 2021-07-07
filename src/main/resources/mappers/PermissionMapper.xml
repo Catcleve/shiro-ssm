@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace需要与接口权限定类名一致-->
+<mapper namespace="com.shiro.mapper.PermissionMapper">
+
+    <select id="queryByUserName" resultType="permission">
+
+        SELECT * FROM t_permission p WHERE p.parentId = '0' and p.pid IN
+        (SELECT rp.perId FROM t_role_permission rp WHERE rp.roleId in
+        (SELECT ur.roleId FROM t_user_role ur LEFT JOIN t_user u
+            on ur.uId = u.uId WHERE u.userName = #{userName}))
+
+    </select>
+
+    <select id="queryAll" resultType="permission">
+        select * from t_permission
+    </select>
+
+</mapper>
